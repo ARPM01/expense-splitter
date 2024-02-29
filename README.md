@@ -1,10 +1,16 @@
 # Expense Splitter
-Splitwise clone as a web application implemented using Python Flask and SQLite 3
+Splitwise clone as a web application. 
+
 ---
+## Technologies used:
+- [Bootstrap v5.3](https://getbootstrap.com/)
+- [Flask](https://flask.palletsprojects.com/en/3.0.x/)
+
+
 ## Steps to run the application:
 
 1. Install Python 3.12.2 (or higher)
-3. Open a command termina and set up a virtual environment
+3. Open a command terminal and set up a virtual environment
     ```
     python -m venv venv
     ```
