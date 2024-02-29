@@ -29,7 +29,7 @@
     <div class="container main-content">
     <h1>Expenses</h1>
     <hr>
-        <div class="container task-list">
+        <div class="container">
             <ul class="list-group list-group-flush">
             {% for exp in expenses %}
                 <div class="container">
@@ -52,12 +52,12 @@
         </div>
     </div>
 
-    <!-- Create new task modal -->
+    <!-- Create new expense modal -->
     <div class="modal fade" id="addExpense" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                <h1 class="modal-title fs-5">Add new task</h1>
+                <h1 class="modal-title fs-5">Add new expense</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body container create-item">
