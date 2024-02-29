@@ -39,5 +39,13 @@ def delete(index):
     return redirect(url_for("home"))
 
 
+@app.route("/modify/<int:index>")
+def modify(index):
+    # TODO: Add a modal to modify the expense
+    if len(expenses) > index:
+        return redirect(url_for("home"))
+    return redirect(url_for("home"))
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
