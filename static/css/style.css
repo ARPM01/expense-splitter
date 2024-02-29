@@ -5,3 +5,9 @@
 .task-list {
     width: 50%;
 }
+
+.navbar-logo {
+    fill: green;
+    width: 30px;
+    height: 30px;
+}
