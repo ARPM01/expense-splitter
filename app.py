@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
 
-from models import Expense
+from models import Expense, User, users, expenses
+
+# TODO: Research on how to make this OOP.
 
 app = Flask(__name__, template_folder="templates")
-
-expenses = []
 
 
 @app.route("/")
@@ -14,18 +14,25 @@ def root():
 
 @app.route("/home")
 def home():
-    return render_template("home.html", expenses=expenses)
+    return render_template(
+        "home.html",
+        expenses=expenses,
+        users=users,
+    )
 
 
 @app.route("/create", methods=["POST"])
 def create():
-    expense_title = request.form["expense_title"]
+    expense_name = request.form["name"]
+    expense_amount = request.form["amount"]
+    expense_paid_by = request.form["paid_by"]
+
     # TODO: Add new fields to the form
     expenses.append(
         Expense(
-            title=expense_title,
-            amount=50.0,
-            paid_by=None,
+            title=expense_name,
+            amount=expense_amount,
+            paid_by=expense_paid_by,
             owed_by=[],
         )
     )
