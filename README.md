@@ -20,7 +20,7 @@ Splitwise clone as a web application implemented using Python Flask and SQLite 3
     ```
     pip install -r requirements.txt
     ```
-6. Run the application through `app.py`
+6. Run the server through `app.py`. By default, the application should be seen on http://127.0.0.1:5000 
     ```
     python app.py
     ```
