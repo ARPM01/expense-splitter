@@ -26,14 +26,14 @@ def create():
     expense_name = request.form["name"]
     expense_amount = request.form["amount"]
     expense_paid_by = request.form["paid_by"]
+    expense_equally_split = request.form.get("equally_split")
 
-    # TODO: Add new fields to the form
     expenses.append(
         Expense(
             title=expense_name,
             amount=expense_amount,
             paid_by=expense_paid_by,
-            owed_by=[],
+            equally_split=expense_equally_split,
         )
     )
     return redirect(url_for("home"))

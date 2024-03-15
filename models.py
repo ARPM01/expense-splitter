@@ -26,7 +26,7 @@ class User:
 
 
 class Expense:
-    def __init__(self, title: str, amount: float, paid_by: User, owed_by: List[User]):
+    def __init__(self, title: str, amount: float, paid_by: User, equally_split: bool):
         """
         Initializes an Expense object with title, amount, paid_by, and settled attributes.
 
@@ -38,8 +38,8 @@ class Expense:
                 a float representing the amount of the expense
             paid_by : int
                 a int representing the id of a User object who paid for the expense
-            owed_by : list
-                a list of User objects representing the users who owe money for the expense
+            equally_split : bool
+                a boolean representing whether the expense is equally split
             settled : bool
                 a boolean representing whether the expense has been settled
 
@@ -47,6 +47,7 @@ class Expense:
         self.title = title
         self.amount = amount
         self.paid_by = paid_by
+        self.equally_split = equally_split
         self.settled = False
 
         self.user_paid_by = self.__get_user_paid_by()
