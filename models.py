@@ -50,13 +50,16 @@ class Expense:
         self.equally_split = equally_split
         self.settled = False
 
-        self.user_paid_by = self.__get_user_paid_by()
-
-    def __get_user_paid_by(self) -> User:
-        # TODO: Implement user search in database
+    def get_user_paid_by(self) -> User:
+        """
+        Returns the User object who paid for the expense.
+        """
         for user in users:
             if user.id == int(self.paid_by):
                 return user
+
+    def __str__(self) -> str:
+        return f"{self.title} - {self.amount} - {self.paid_by} - {self.equally_split}"
 
 
 expenses = []

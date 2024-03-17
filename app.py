@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 
 from models import Expense, User, users, expenses
 
@@ -25,8 +25,8 @@ def home():
 def create():
     expense_name = request.form["name"]
     expense_amount = request.form["amount"]
-    expense_paid_by = request.form["paid_by"]
-    expense_equally_split = request.form.get("equally_split")
+    expense_paid_by = request.form["paidBy"]
+    expense_equally_split = request.form.get("equallySplit")
 
     expenses.append(
         Expense(
@@ -46,12 +46,25 @@ def delete(index):
     return redirect(url_for("home"))
 
 
-@app.route("/modify/<int:index>")
+@app.route("/modify/<int:index>", methods=["POST"])
 def modify(index):
-    # TODO: Add a modal to modify the expense
-    if len(expenses) > index:
+    try:
+        expense_selected = expenses[index]
+    except IndexError:
         return redirect(url_for("home"))
+    expense_selected.title = request.form["newName"]
+    expense_selected.amount = request.form["newAmount"]
+    expense_selected.paid_by = request.form["newPaidBy"]
+    expense_selected.equally_split = request.form.get("newEquallySplit")
+
     return redirect(url_for("home"))
+
+
+@app.route("/expense/<int:id>", methods=["GET"])
+def get_expense(id):
+    expense = expenses[id]
+    print(expense.__dict__)
+    return jsonify(expense.__dict__)
 
 
 if __name__ == "__main__":
