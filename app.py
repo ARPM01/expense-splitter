@@ -1,7 +1,8 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 
 from models import Base, Expense, User, users_list, expenses_list
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, insert, select, update, delete
+from sqlalchemy.orm import Session
 
 
 class ExpenseSplitterApp:
@@ -66,14 +67,25 @@ class ExpenseSplitterApp:
             expense_paid_by = request.form["paidBy"]
             expense_equally_split = request.form.get("equallySplit")
 
-            expenses_list.append(
-                Expense(
-                    title=expense_name,
-                    amount=expense_amount,
-                    paid_by=expense_paid_by,
-                    equally_split=expense_equally_split,
+            get_user_id = select(User.id).where(User.name == expense_paid_by)
+
+            stmt = insert(Expense)
+
+            with Session(self.engine) as session:
+                id = session.scalars(get_user_id)
+                result = session.execute(
+                    stmt,
+                    [
+                        {
+                            "name": expense_name,
+                            "owed": id,
+                            "value": expense_amount,
+                            "split": expense_equally_split,
+                        }
+                    ],
                 )
-            )
+                session.commit()
+
             return redirect(url_for("expenses"))
 
         @self.app.route("/delete/<int:index>")

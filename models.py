@@ -36,6 +36,5 @@ class Expense(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
     owed = mapped_column(ForeignKey("users.id"))
-    currency: Mapped[str] = mapped_column(String(3))
     value: Mapped[float] = mapped_column()
     split: Mapped[bool] = mapped_column()
