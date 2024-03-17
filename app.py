@@ -49,7 +49,7 @@ def delete(index):
 @app.route("/modify/<int:index>", methods=["POST"])
 def modify(index):
     try:
-        expense_selected = expenses[index]
+        expense_selected = get_expense
     except IndexError:
         return redirect(url_for("home"))
     expense_selected.title = request.form["newName"]
@@ -57,6 +57,16 @@ def modify(index):
     expense_selected.paid_by = request.form["newPaidBy"]
     expense_selected.equally_split = request.form.get("newEquallySplit")
 
+    return redirect(url_for("home"))
+
+
+@app.route("/settle/<int:index>")
+def settle(index):
+    try:
+        expense_selected = expenses[index]
+    except IndexError:
+        return redirect(url_for("home"))
+    expense_selected.settled = True
     return redirect(url_for("home"))
 
 
