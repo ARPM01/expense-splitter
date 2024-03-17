@@ -30,18 +30,6 @@ class User(Base):
         return f"User(id={self.id!r}, name={self.name!r})"
 
 
-# class Group(Base):
-#     __tablename__ = "groups"
-
-#     id: Mapped[int] = mapped_column(primary_key=True)
-#     name: Mapped[str] = mapped_column(String(30))
-
-#     members: Mapped[List["User"]] = relationship("User", back_populates="groups")
-
-#     def __repr__(self) -> str:
-#         return f"Group(id={self.id!r}, name={self.name!r})"
-
-
 class Expense(Base):
     __tablename__ = "expenses"
 
