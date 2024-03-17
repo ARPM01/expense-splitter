@@ -79,7 +79,6 @@ def root():
     stmt = insert(models.Expense).values(
         name=expense_name,
         owed=expense_paid_by,
-        currency="PHP",
         value=expense_amount,
         split=expense_equally_split,
     )
