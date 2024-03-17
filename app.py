@@ -1,7 +1,8 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 
 from models import Base, Expense, User, users_list, expenses_list
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, insert, select, update, delete
+from sqlalchemy.orm import Session
 
 
 class ExpenseSplitterApp:
@@ -26,18 +27,6 @@ class ExpenseSplitterApp:
         @self.app.route("/")
         def root():
             return redirect(url_for("home"))
-from flask import Flask, render_template, request, redirect, url_for
-from sqlalchemy import create_engine, text, insert
-import models
-
-# TODO: Research on how to make this OOP.
-
-app = Flask(__name__, template_folder="templates")
-
-
-@app.route("/")
-def root():
-    return redirect(url_for("home"))
 
         @self.app.route("/home")
         def home():
@@ -78,21 +67,26 @@ def root():
             expense_paid_by = request.form["paidBy"]
             expense_equally_split = request.form.get("equallySplit")
 
-    engine = create_engine("sqlite+pysqlite:///database.db", echo=True)
-    models.Base.metadata.create_all()
+            get_user_id = select(User.id).where(User.name == expense_paid_by)
 
-    stmt = insert(models.Expense).values(
-        name=expense_name,
-        owed=expense_paid_by,
-        value=expense_amount,
-        split=expense_equally_split,
-    )
+            stmt = insert(Expense)
 
-    with engine.connect() as conn:
-        result = conn.execute(stmt)
-        conn.commit()
+            with Session(self.engine) as session:
+                id = session.scalars(get_user_id)
+                result = session.execute(
+                    stmt,
+                    [
+                        {
+                            "name": expense_name,
+                            "owed": id,
+                            "value": expense_amount,
+                            "split": expense_equally_split,
+                        }
+                    ],
+                )
+                session.commit()
 
-    return redirect(url_for("home"))
+            return redirect(url_for("expenses"))
 
         @self.app.route("/delete/<int:index>")
         def delete(index):
