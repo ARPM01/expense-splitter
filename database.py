@@ -7,7 +7,7 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import Optional, List
 
-engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
+# engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
 
 
 class Base(DeclarativeBase):
@@ -16,14 +16,6 @@ class Base(DeclarativeBase):
     """
 
     pass
-
-
-# user_group_association = Table(
-#     "user_group_association",
-#     Base.metadata,
-#     Column("user_id", Integer, ForeignKey("users.id")),
-#     Column("group_id", Integer, ForeignKey("groups.id")),
-# )
 
 
 class User(Base):
@@ -62,18 +54,18 @@ class Expense(Base):
     split: Mapped[bool] = mapped_column()
 
 
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
 
 
-stmt = insert(Expense).values(
-    name="Food", owed="HMF", currency="PHP", value="500", split=0
-)
+# stmt = insert(Expense).values(
+#     name="Food", owed="HMF", currency="PHP", value="500", split=0
+# )
 
-compiled = stmt.compile()
+# compiled = stmt.compile()
 
-with engine.connect() as conn:
-    result = conn.execute(stmt)
-    conn.commit()
+# with engine.connect() as conn:
+#     result = conn.execute(stmt)
+#     conn.commit()
 
 # with engine.connect() as conn:
 #     result = conn.execute(text("SELECT id FROM expenses ORDER BY id DESC LIMIT 1"))
@@ -83,6 +75,6 @@ with engine.connect() as conn:
 # if len(result.all()) == 0:
 #     print("True")
 
-with engine.connect() as conn:
-    result = conn.execute(text("SELECT * FROM expenses"))
-    print(result.all())
+# with engine.connect() as conn:
+#     result = conn.execute(text("SELECT * FROM expenses"))
+#     print(result.all())

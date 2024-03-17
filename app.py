@@ -1,12 +1,16 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 
-from models import Expense, User, users_list, expenses_list
+from models import Base, Expense, User, users_list, expenses_list
+from sqlalchemy import create_engine
 
 
 class ExpenseSplitterApp:
     def __init__(self):
         self.app = Flask(__name__, template_folder="templates")
         self.setup_routes()
+        self.engine = create_engine("sqlite+pysqlite:///database.db", echo=True)
+        self.metadata = Base.metadata
+        self.metadata.create_all(self.engine)
 
     def run(self):
         """
@@ -56,6 +60,7 @@ def root():
             """
             Renders the users page with the list of expenses and users.
             """
+
             return render_template(
                 "users.html",
                 expenses=expenses_list,
