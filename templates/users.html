@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container main-content">
+    <div class="page-heading">
+        <h1>Users</h1>
+        <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUser" id="create-btn">Add User</a>
+    </div>
+    <hr>
+        <div class="container">
+            <ul class="list-group list-group-flush">
+            {% for user in users %}
+            {% endfor %}
+            </ul>
+    </div>
+</div>
+
+
+{% endblock %}

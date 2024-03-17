@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 
-from models import Expense, User, users, expenses
+from models import Expense, User, users_list, expenses_list
 
 
 class ExpenseSplitterApp:
@@ -21,20 +21,34 @@ class ExpenseSplitterApp:
 
         @self.app.route("/")
         def root():
-            """
-            Redirects to the home page.
-            """
             return redirect(url_for("home"))
 
         @self.app.route("/home")
         def home():
+            return render_template("home.html", active_page="home")
+
+        @self.app.route("/expenses")
+        def expenses():
             """
-            Renders the home page with the list of expenses and users.
+            Renders the expenses page with the list of expenses and users.
             """
             return render_template(
-                "home.html",
-                expenses=expenses,
-                users=users,
+                "expenses.html",
+                expenses=expenses_list,
+                users=users_list,
+                active_page="expenses",
+            )
+
+        @self.app.route("/users")
+        def users():
+            """
+            Renders the users page with the list of expenses and users.
+            """
+            return render_template(
+                "users.html",
+                expenses=expenses_list,
+                users=users_list,
+                active_page="users",
             )
 
         @self.app.route("/create", methods=["POST"])
@@ -47,7 +61,7 @@ class ExpenseSplitterApp:
             expense_paid_by = request.form["paidBy"]
             expense_equally_split = request.form.get("equallySplit")
 
-            expenses.append(
+            expenses_list.append(
                 Expense(
                     title=expense_name,
                     amount=expense_amount,
@@ -55,16 +69,16 @@ class ExpenseSplitterApp:
                     equally_split=expense_equally_split,
                 )
             )
-            return redirect(url_for("home"))
+            return redirect(url_for("expenses"))
 
         @self.app.route("/delete/<int:index>")
         def delete(index):
             """
             Deletes an expense from the list of expenses.
             """
-            if len(expenses) > index:
-                del expenses[index]
-            return redirect(url_for("home"))
+            if len(expenses_list) > index:
+                del expenses_list[index]
+            return redirect(url_for("expenses"))
 
         @self.app.route("/modify/<int:index>", methods=["POST"])
         def modify(index):
@@ -80,7 +94,7 @@ class ExpenseSplitterApp:
             expense_selected.paid_by = request.form["newPaidBy"]
             expense_selected.equally_split = request.form.get("newEquallySplit")
 
-            return redirect(url_for("home"))
+            return redirect(url_for("expenses"))
 
         @self.app.route("/settle/<int:index>")
         def settle(index):
@@ -88,19 +102,19 @@ class ExpenseSplitterApp:
             Changes the settled status of an expense from the list of expenses.
             """
             try:
-                expense_selected = expenses[index]
+                expense_selected = expenses_list[index]
             except IndexError:
                 return redirect(url_for("home"))
             expense_selected.settled = True
             # TODO: Move settled expenses to the bottom of the list.
-            return redirect(url_for("home"))
+            return redirect(url_for("expenses"))
 
         @self.app.route("/expense/<int:id>", methods=["GET"])
         def get_expense(id):
             """
             Returns the jsonified expense object with the given id.
             """
-            expense = expenses[id]
+            expense = expenses_list[id]
             print(expense.__dict__)
             return jsonify(expense.__dict__)
 

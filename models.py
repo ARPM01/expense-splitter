@@ -54,7 +54,7 @@ class Expense:
         """
         Returns the User object who paid for the expense.
         """
-        for user in users:
+        for user in users_list:
             if user.id == int(self.paid_by):
                 return user
 
@@ -62,8 +62,8 @@ class Expense:
         return f"{self.title} - {self.amount} - {self.paid_by} - {self.equally_split}"
 
 
-expenses = []
-users = [
+expenses_list = []
+users_list = [
     User("ARPM", id=1),
     User("HMF", id=2),
 ]
