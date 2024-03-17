@@ -10,8 +10,6 @@ import random
 # TODO: Implement a database to store user and expense data
 # TODO: Organize models into separate files
 
-engine = create_engine("sqlite+pysqlite:///test.db", echo=True)
-
 
 class Base(DeclarativeBase):
     """
@@ -19,14 +17,6 @@ class Base(DeclarativeBase):
     """
 
     pass
-
-
-# user_group_association = Table(
-#     "user_group_association",
-#     Base.metadata,
-#     Column("user_id", Integer, ForeignKey("users.id")),
-#     Column("group_id", Integer, ForeignKey("groups.id")),
-# )
 
 
 class User(Base):
@@ -60,10 +50,6 @@ class Expense(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
     owed = mapped_column(ForeignKey("users.id"))
-    currency: Mapped[str] = mapped_column(String(3))
     value: Mapped[float] = mapped_column()
 
     ower: Mapped[List["User"]] = relationship("User")
-
-
-Base.metadata.create_all(engine)

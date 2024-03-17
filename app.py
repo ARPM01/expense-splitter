@@ -22,6 +22,18 @@ class ExpenseSplitterApp:
         @self.app.route("/")
         def root():
             return redirect(url_for("home"))
+from flask import Flask, render_template, request, redirect, url_for
+from sqlalchemy import create_engine, text, insert
+import models
+
+# TODO: Research on how to make this OOP.
+
+app = Flask(__name__, template_folder="templates")
+
+
+@app.route("/")
+def root():
+    return redirect(url_for("home"))
 
         @self.app.route("/home")
         def home():
@@ -61,15 +73,22 @@ class ExpenseSplitterApp:
             expense_paid_by = request.form["paidBy"]
             expense_equally_split = request.form.get("equallySplit")
 
-            expenses_list.append(
-                Expense(
-                    title=expense_name,
-                    amount=expense_amount,
-                    paid_by=expense_paid_by,
-                    equally_split=expense_equally_split,
-                )
-            )
-            return redirect(url_for("expenses"))
+    engine = create_engine("sqlite+pysqlite:///database.db", echo=True)
+    models.Base.metadata.create_all()
+
+    stmt = insert(models.Expense).values(
+        name=expense_name,
+        owed=expense_paid_by,
+        currency="PHP",
+        value=expense_amount,
+        split=expense_equally_split,
+    )
+
+    with engine.connect() as conn:
+        result = conn.execute(stmt)
+        conn.commit()
+
+    return redirect(url_for("home"))
 
         @self.app.route("/delete/<int:index>")
         def delete(index):
