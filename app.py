@@ -3,6 +3,9 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for
 from models import Base, Expense, User
 from sqlalchemy import create_engine, insert, select, update, delete
 from sqlalchemy.orm import Session
+from models import Base, Expense, User
+from sqlalchemy import create_engine, insert, select, update, delete
+from sqlalchemy.orm import Session
 
 
 class ExpenseSplitterApp:
@@ -23,12 +26,51 @@ class ExpenseSplitterApp:
             result = session.execute(stmt).scalars().first()
 
         return result
+        self.engine = create_engine("sqlite+pysqlite:///database.db", echo=True)
+        self.metadata = Base.metadata
+        self.metadata.create_all(self.engine)
+        self.__update_lists()
+
+    def get_user_paid_by(self, expense):
+        """
+        Get name of user who paid.
+        """
+        stmt = select(User.name).where(User.id == expense.owed)
+        with Session(self.engine) as session:
+            result = session.execute(stmt).scalars().first()
+
+        return result
 
     def run(self):
         """
         Runs the Flask app on port 5000.
         """
         self.app.run(host="0.0.0.0", debug=True)
+
+    def update_users(self):
+        """
+        Update user list
+        """
+        stmt = select(User)
+        with Session(self.engine) as session:
+            result = session.execute(stmt).scalars().all()
+            self.users_list = result
+
+    def update_expenses(self):
+        """
+        Update expense list
+        """
+        stmt = select(Expense)
+        with Session(self.engine) as session:
+            result = session.execute(stmt).scalars().all()
+            self.expenses_list = result
+
+    def __update_lists(self):
+        """
+        Update expense and user list
+        """
+        self.update_expenses()
+        self.update_users()
 
     def update_users(self):
         """
@@ -76,11 +118,16 @@ class ExpenseSplitterApp:
 
             self.__update_lists()
 
+            self.__update_lists()
+
             return render_template(
                 "expenses.html",
                 expenses=self.expenses_list,
                 users=self.users_list,
+                expenses=self.expenses_list,
+                users=self.users_list,
                 active_page="expenses",
+                app=self,
                 app=self,
             )
 
@@ -92,11 +139,14 @@ class ExpenseSplitterApp:
 
             self.__update_lists()
 
+            self.__update_lists()
+
             return render_template(
                 "users.html",
                 expenses=self.expenses_list,
                 users=self.users_list,
                 active_page="users",
+                app=self,
                 app=self,
             )
 
@@ -162,6 +212,7 @@ class ExpenseSplitterApp:
             target = self.expenses_list[index]
 
             try:
+                expense_selected = get_expense(index)
                 expense_selected = get_expense(index)
             except IndexError:
                 return redirect(url_for("home"))
