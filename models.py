@@ -1,69 +1,84 @@
-from typing import List
+from typing import List, Optional
+from sqlalchemy import create_engine, insert, text, select, update, delete
+from sqlalchemy import Table, Column, Integer, ForeignKey, String
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Session
+
 import random
 
 
 # TODO: Implement a database to store user and expense data
 # TODO: Organize models into separate files
-class User:
-    def __init__(self, name: str, id: int):
-        """
-        Initializes a User object with a name, id, and an empty list of expenses.
-
-        Parameters
-        ----------
-            name : str
-                a string representing the user's name
-            id : int
-                a int representing the user's id
-        """
-        self.name = name
-        # TODO: This id is temporary. Use database to generate unique ids.
-        self.id = id
-        self.expenses = []
-
-    def __str__(self) -> str:
-        return self.name
 
 
-class Expense:
-    def __init__(self, title: str, amount: float, paid_by: User, equally_split: bool):
-        """
-        Initializes an Expense object with title, amount, paid_by, and settled attributes.
+class Base(DeclarativeBase):
+    """
+    SQLAlchemy subclassing DeclarativeBase for defining ORM classes.
+    """
 
-        Parameters
-        ----------
-            title : str
-                a string representing the title of the expense
-            amount : float
-                a float representing the amount of the expense
-            paid_by : int
-                a int representing the id of a User object who paid for the expense
-            equally_split : bool
-                a boolean representing whether the expense is equally split
-            settled : bool
-                a boolean representing whether the expense has been settled
-
-        """
-        self.title = title
-        self.amount = amount
-        self.paid_by = paid_by
-        self.equally_split = equally_split
-        self.settled = False
-
-    def get_user_paid_by(self) -> User:
-        """
-        Returns the User object who paid for the expense.
-        """
-        for user in users_list:
-            if user.id == int(self.paid_by):
-                return user
-
-    def __str__(self) -> str:
-        return f"{self.title} - {self.amount} - {self.paid_by} - {self.equally_split}"
+    pass
 
 
-expenses_list = []
-users_list = [
-    User("ARPM", id=1),
-    User("HMF", id=2),
-]
+class User(Base):
+    """
+    A SQLAlchemy Declarative Base class representing a user with associated attributes.
+
+    Attributes
+    ----------
+    id : Mapped[int]
+        A primary key column in the database, representing the user's ID.
+    name : Mapped[str]
+        A column in the database representing the user's name.
+
+    Methods
+    -------
+    __repr__() -> str
+        Represent the User instance as a string.
+    """
+
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(30))
+
+    def __repr__(self) -> str:
+        return f"User(id={self.id!r}, name={self.name!r})"
+
+
+class Expense(Base):
+    """
+    A SQLAlchemy Declarative Base class representing an expense.
+
+    Attributes
+    ----------
+    id : Mapped[int]
+        A primary key column in the database, representing the expense's ID.
+    name : Mapped[str]
+        A column in the database representing the name of the expense.
+    owed : Mapped[int]
+        A foreign key column pointing to the User ID who owes this expense.
+    value : Mapped[float]
+        A column in the database storing the value of the expense.
+    split : Mapped[bool]
+        A Boolean column indicating whether the expense is to be split.
+    settled : Mapped[bool]
+        A Boolean column indicating whether the expense has been settled.
+
+    Methods
+    -------
+    __repr__() -> str
+        Represent the Expense instance as a string.
+    """
+
+    __tablename__ = "expenses"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(30))
+    owed = mapped_column(ForeignKey("users.id"))
+    value: Mapped[float] = mapped_column()
+    split: Mapped[bool] = mapped_column()
+    settled: Mapped[bool] = mapped_column()
+
+    def __repr__(self) -> str:
+        return f"Expense(name={self.name!r}, value={self.value!r})"
