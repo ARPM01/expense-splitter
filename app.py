@@ -131,6 +131,8 @@ class ExpenseSplitterApp:
                 )
                 session.commit()
 
+            self.__update_lists()
+
             return redirect(url_for("expenses"))
 
         @self.app.route("/remove/<int:index>")
@@ -139,12 +141,15 @@ class ExpenseSplitterApp:
             Deletes an expense from the list of expenses.
             """
 
+            target = self.expenses_list[index]
             # need to convert index to expense ID
-            stmt = delete(Expense).where(Expense.id == index + 1)
+            stmt = delete(Expense).where(Expense.id == target.id)
 
             with Session(self.engine) as session:
                 result = session.execute(stmt)
                 session.commit()
+
+            self.__update_lists()
 
             return redirect(url_for("expenses"))
 
@@ -154,7 +159,8 @@ class ExpenseSplitterApp:
             Modifies an expense from the list of expenses.
             """
 
-            # index here should refer to expense id.
+            target = self.expenses_list[index]
+
             try:
                 expense_selected = get_expense(index)
             except IndexError:
@@ -164,11 +170,10 @@ class ExpenseSplitterApp:
             value = request.form["newAmount"]
             owed = request.form["newPaidBy"]
             split = request.form.get("newEquallySplit") is not None
-            print(f"SPLIT = {split}, {type(split)}")
 
             stmt = (
                 update(Expense)
-                .where(Expense.id == index + 1)
+                .where(Expense.id == target.id)
                 .values(
                     name=name,
                     value=value,
@@ -181,6 +186,8 @@ class ExpenseSplitterApp:
                 result = session.execute(stmt)
                 session.commit()
 
+            self.__update_lists()
+
             return redirect(url_for("expenses"))
 
         @self.app.route("/settle/<int:index>")
@@ -189,28 +196,34 @@ class ExpenseSplitterApp:
             Changes the settled status of an expense from the list of expenses.
             """
 
-            # index should refer to expense id
-            stmt = select(Expense).where(Expense.id == index + 1)
+            target = self.expenses_list[index]
+
+            stmt = select(Expense).where(Expense.id == target.id)
             with Session(self.engine) as session:
                 result = session.execute(stmt).scalars().first()
 
             if result is None:
                 return redirect(url_for("home"))
 
-            stmt = update(Expense).where(Expense.id == index + 1).values(settled=True)
+            stmt = update(Expense).where(Expense.id == target.id).values(settled=True)
             with Session(self.engine) as session:
                 result = session.execute(stmt)
                 session.commit()
+
+            self.__update_lists()
+
             # TODO: Move settled expenses to the bottom of the list.
             return redirect(url_for("expenses"))
 
         @self.app.route("/expense/<int:id>", methods=["GET"])
-        def get_expense(id):
+        def get_expense(index):
             """
-            Returns the jsonified expense object with the given id.
+            Returns the jsonified expense object with the given index.
             """
 
-            stmt = select(Expense).where(Expense.id == id + 1)
+            target = self.expenses_list[index]
+
+            stmt = select(Expense).where(Expense.id == target.id)
 
             with Session(self.engine) as session:
                 result = session.execute(stmt).scalars().first()
