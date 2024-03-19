@@ -10,15 +10,33 @@ import random
 
 # TODO: Implement a database to store user and expense data
 # TODO: Organize models into separate files
+
+
 class Base(DeclarativeBase):
     """
-    Base class for mapping
+    SQLAlchemy subclassing DeclarativeBase for defining ORM classes.
     """
 
     pass
 
 
 class User(Base):
+    """
+    A SQLAlchemy Declarative Base class representing a user with associated attributes.
+
+    Attributes
+    ----------
+    id : Mapped[int]
+        A primary key column in the database, representing the user's ID.
+    name : Mapped[str]
+        A column in the database representing the user's name.
+
+    Methods
+    -------
+    __repr__() -> str
+        Represent the User instance as a string.
+    """
+
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -29,6 +47,30 @@ class User(Base):
 
 
 class Expense(Base):
+    """
+    A SQLAlchemy Declarative Base class representing an expense.
+
+    Attributes
+    ----------
+    id : Mapped[int]
+        A primary key column in the database, representing the expense's ID.
+    name : Mapped[str]
+        A column in the database representing the name of the expense.
+    owed : Mapped[int]
+        A foreign key column pointing to the User ID who owes this expense.
+    value : Mapped[float]
+        A column in the database storing the value of the expense.
+    split : Mapped[bool]
+        A Boolean column indicating whether the expense is to be split.
+    settled : Mapped[bool]
+        A Boolean column indicating whether the expense has been settled.
+
+    Methods
+    -------
+    __repr__() -> str
+        Represent the Expense instance as a string.
+    """
+
     __tablename__ = "expenses"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -38,27 +80,5 @@ class Expense(Base):
     split: Mapped[bool] = mapped_column()
     settled: Mapped[bool] = mapped_column()
 
-
-if __name__ == "__main__":
-    engine = create_engine("sqlite+pysqlite:///database.db", echo=True)
-    Base.metadata.create_all(engine)
-
-    # stmt = insert(User).values([{"name": "ARPM"}, {"name": "HMF"}])
-
-    # with Session(engine) as session:
-    #     result = session.execute(stmt)
-    #     session.commit()
-
-    # stmt = insert(Expense).values(
-    #     [{"name": "Water", "owed": 1, "value": 30, "split": True, "settled": False}]
-    # )
-
-    # with Session(engine) as session:
-    #     session.execute(stmt)
-    #     session.commit()
-
-    # stmt = select(Expense)
-
-    # with Session(engine) as session:
-    #     result = session.execute(stmt).scalars().all()
-    #     print(result)
+    def __repr__(self) -> str:
+        return f"Expense(name={self.name!r}, value={self.value!r})"
