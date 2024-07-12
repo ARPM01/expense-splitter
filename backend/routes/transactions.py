@@ -1,11 +1,11 @@
 from flask import Blueprint, request, jsonify
+
 from models.transaction import (
     get_all_transactions,
     add_transaction,
     update_transaction,
     delete_transaction,
 )
-from flask_cors import CORS
 
 transactions_bp = Blueprint("transactions", __name__)
 
@@ -13,8 +13,10 @@ transactions_bp = Blueprint("transactions", __name__)
 @transactions_bp.route("/", methods=["GET"])
 def get_transactions():
     transactions = get_all_transactions()
-    print(transactions, type(transactions))
-    return jsonify(transactions)
+    try:
+        return [__transaction_to_dict(transaction) for transaction in transactions]
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @transactions_bp.route("/", methods=["POST"])
@@ -35,3 +37,8 @@ def modify_transaction(transaction_id):
 def remove_transaction(transaction_id):
     delete_transaction(transaction_id)
     return jsonify({"status": "Transaction deleted"}), 200
+
+
+def __transaction_to_dict(transaction):
+    transaction["_id"] = str(transaction["_id"])
+    return transaction

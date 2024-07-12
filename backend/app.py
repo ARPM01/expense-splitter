@@ -6,6 +6,8 @@ from models import init_db
 
 app = Flask(__name__)
 app.config.from_object(Config)
+app.url_map.strict_slashes = False
+
 CORS(
     app,
     resources={r"/*": {"origins": "*", "headers": "Content-Type"}},

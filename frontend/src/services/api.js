@@ -31,3 +31,21 @@ export async function deleteTransaction(transactionId) {
     const response = await axios.delete(`${API_URL}/transactions/${transactionId}`);
     return response.data;
 }
+
+export async function createUser(user) {
+    console.log("creating user");
+    const response = await axios.post(`${API_URL}/users`, user);
+    return response.data;
+}
+
+export async function updateUser(userId, user) {
+    console.log("updating user");
+    const response = await axios.put(`${API_URL}/users/${userId}`, user);
+    return response.data;
+}
+
+export async function deleteUser(userId) {
+    console.log("deleting user");
+    const response = await axios.delete(`${API_URL}/users/${userId}`);
+    return response.data;
+}
