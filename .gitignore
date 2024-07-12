@@ -161,3 +161,6 @@ cython_debug/
 
 # test scripts
 database.py
+
+# node
+node_modules/
