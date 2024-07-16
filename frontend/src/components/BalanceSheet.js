@@ -6,8 +6,7 @@ function BalanceSheet({ transactions, users }) {
 
     return (
         <div>
-            {/* Display balance sheet */}
-            Balance Sheet Component
+            <h1>Balance Sheet</h1>
         </div>
     );
 }
