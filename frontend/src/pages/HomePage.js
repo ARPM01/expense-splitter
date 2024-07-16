@@ -81,12 +81,6 @@ function HomePage() {
 
     return (
         <div>
-            <Button variant="contained" color="primary" onClick={() => setOpenTransactionModal(true)}>
-                Add Transaction
-            </Button>
-            <Button variant="contained" color="secondary" onClick={() => setOpenUserModal(true)}>
-                Add User
-            </Button>
             <NewTransactionModal
                 open={openTransactionModal}
                 onClose={() => setOpenTransactionModal(false)}
@@ -106,8 +100,10 @@ function HomePage() {
                 user={editUser}
             />
             <ExpenseTable transactions={transactions} onEdit={handleEditTransaction} onDelete={handleDeleteTransaction} />
+            <Button variant="contained" color="primary" onClick={() => setOpenTransactionModal(true)}>
+                Add Transaction
+            </Button>
             <BalanceSheet transactions={transactions} users={users} />
-            {/* Here you can add a user table or list component for managing users */}
             <div>
                 <h3>Users</h3>
                 <ul>
@@ -120,6 +116,9 @@ function HomePage() {
                     ))}
                 </ul>
             </div>
+            <Button variant="contained" color="secondary" onClick={() => setOpenUserModal(true)}>
+                Add User
+            </Button>
         </div>
     );
 }
