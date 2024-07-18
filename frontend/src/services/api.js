@@ -49,3 +49,8 @@ export async function deleteUser(userId) {
     const response = await axios.delete(`${API_URL}/users/${userId}`);
     return response.data;
 }
+
+export async function fetchBalance() {
+    const response = await axios.get(`${API_URL}/balance`);
+    return response.data;
+}

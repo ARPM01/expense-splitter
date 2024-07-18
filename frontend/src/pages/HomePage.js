@@ -105,7 +105,7 @@ function HomePage() {
             <Button variant="contained" color="primary" onClick={() => setOpenTransactionModal(true)} id="add-transaction-button">
                 Add Transaction
             </Button>
-            <BalanceSheet transactions={transactions} users={users} />
+            <BalanceSheet />
             <div>
                 <h3><Person />&nbsp;&nbsp;&nbsp;Users</h3>
                 <ul>

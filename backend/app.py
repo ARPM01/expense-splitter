@@ -17,9 +17,11 @@ init_db(app)
 
 from routes.transactions import transactions_bp
 from routes.users import users_bp
+from routes.balance import balance_bp
 
 app.register_blueprint(transactions_bp, url_prefix="/api/transactions")
 app.register_blueprint(users_bp, url_prefix="/api/users")
+app.register_blueprint(balance_bp, url_prefix="/api/balance")
 
 
 @app.route("/")
