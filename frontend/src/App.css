@@ -1,5 +1,8 @@
 .App {
-  text-align: center;
+  width: 50vw;
+  margin: 0 auto;
+  padding: 3em;
+
 }
 
 .App-logo {
@@ -32,7 +35,13 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+/* HomePage */
+#add-transaction-button {
+  margin-top: 1em;
 }

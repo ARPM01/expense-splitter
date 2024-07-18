@@ -5,6 +5,8 @@ import NewTransactionModal from '../components/NewTransactionModal';
 import UserModal from '../components/UserModal';
 import { fetchTransactions, fetchUsers, createTransaction, updateTransaction, deleteTransaction, createUser, updateUser, deleteUser } from '../services/api';
 import Button from '@mui/material/Button';
+import { Person } from '@mui/icons-material';
+
 
 function HomePage() {
     const [transactions, setTransactions] = useState([]);
@@ -100,12 +102,12 @@ function HomePage() {
                 user={editUser}
             />
             <ExpenseTable transactions={transactions} onEdit={handleEditTransaction} onDelete={handleDeleteTransaction} />
-            <Button variant="contained" color="primary" onClick={() => setOpenTransactionModal(true)}>
+            <Button variant="contained" color="primary" onClick={() => setOpenTransactionModal(true)} id="add-transaction-button">
                 Add Transaction
             </Button>
             <BalanceSheet transactions={transactions} users={users} />
             <div>
-                <h3>Users</h3>
+                <h3><Person />&nbsp;&nbsp;&nbsp;Users</h3>
                 <ul>
                     {users.map(user => (
                         <li key={user._id}>
@@ -119,7 +121,7 @@ function HomePage() {
             <Button variant="contained" color="secondary" onClick={() => setOpenUserModal(true)}>
                 Add User
             </Button>
-        </div>
+        </div >
     );
 }
 
