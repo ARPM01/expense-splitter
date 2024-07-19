@@ -6,6 +6,7 @@ from models.transaction import (
     update_transaction,
     delete_transaction,
 )
+from models.user import get_user_by_id
 
 transactions_bp = Blueprint("transactions", __name__)
 
@@ -41,4 +42,5 @@ def remove_transaction(transaction_id):
 
 def __transaction_to_dict(transaction):
     transaction["_id"] = str(transaction["_id"])
+    transaction["payor"] = get_user_by_id(transaction["payor"])["name"]
     return transaction
