@@ -2,7 +2,6 @@ import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
@@ -10,7 +9,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Paid from '@mui/icons-material/Paid';
 
-function ExpenseTable({ transactions, onEdit, onDelete }) {
+function ExpenseTable({ transactions, onEdit, onDelete, onAddTransaction }) {
     return (
         <Paper style={{ padding: 16 }}>
             <Typography variant="h6" gutterBottom>
@@ -39,6 +38,9 @@ function ExpenseTable({ transactions, onEdit, onDelete }) {
                     ))}
                 </TableBody>
             </Table>
+            <Button variant="contained" color="primary" onClick={onAddTransaction} id="add-transaction-button">
+                Add Transaction
+            </Button>
         </Paper>
     );
 }

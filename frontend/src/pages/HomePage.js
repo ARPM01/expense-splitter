@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import AppTitle from '../components/AppTitle';
 import ExpenseTable from '../components/ExpenseTable';
 import BalanceSheet from '../components/BalanceSheet';
 import NewTransactionModal from '../components/NewTransactionModal';
 import UserModal from '../components/UserModal';
+import UsersTable from '../components/UsersTable';
 import { fetchTransactions, fetchUsers, createTransaction, updateTransaction, deleteTransaction, createUser, updateUser, deleteUser } from '../services/api';
 import Button from '@mui/material/Button';
-import { Person } from '@mui/icons-material';
+import Grid from '@mui/material/Grid';
+import { Paper } from '@mui/material';
 
 
 function HomePage() {
@@ -101,26 +104,32 @@ function HomePage() {
                 }}
                 user={editUser}
             />
-            <ExpenseTable transactions={transactions} onEdit={handleEditTransaction} onDelete={handleDeleteTransaction} />
-            <Button variant="contained" color="primary" onClick={() => setOpenTransactionModal(true)} id="add-transaction-button">
-                Add Transaction
-            </Button>
-            <BalanceSheet />
-            <div>
-                <h3><Person />&nbsp;&nbsp;&nbsp;Users</h3>
-                <ul>
-                    {users.map(user => (
-                        <li key={user._id}>
-                            {user.name} - {user.email}
-                            <Button onClick={() => handleEditUser(user)}>Edit</Button>
-                            <Button onClick={() => handleDeleteUser(user._id)}>Delete</Button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <Button variant="contained" color="secondary" onClick={() => setOpenUserModal(true)}>
-                Add User
-            </Button>
+            <Grid container spacing={2}>
+                <Grid item lg={12} md={12} sm={12}>
+                    <AppTitle />
+                </Grid>
+                <Grid item lg={6} md={6} sm={12}>
+                    <ExpenseTable
+                        transactions={transactions}
+                        onEdit={handleEditTransaction}
+                        onDelete={handleDeleteTransaction}
+                        onAddTransaction={() => setOpenTransactionModal(true)}
+                    />
+                </Grid>
+                <Grid item lg={3} md={3} sm={12}>
+                    <BalanceSheet />
+                </Grid>
+                <Grid item lg={3} md={3} sm={12}>
+                    <Paper style={{ padding: 16 }}>
+                        <UsersTable
+                            users={users}
+                            handleEditUser={handleEditUser}
+                            handleDeleteUser={handleDeleteUser}
+                            handleAddUser={() => setOpenUserModal(true)}
+                        />
+                    </Paper>
+                </Grid>
+            </Grid>
         </div >
     );
 }
