@@ -6,7 +6,6 @@ import NewTransactionModal from '../components/NewTransactionModal';
 import UserModal from '../components/UserModal';
 import UsersTable from '../components/UsersTable';
 import { fetchTransactions, fetchUsers, createTransaction, updateTransaction, deleteTransaction, createUser, updateUser, deleteUser } from '../services/api';
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { Paper } from '@mui/material';
 
@@ -108,7 +107,7 @@ function HomePage() {
                 <Grid item lg={12} md={12} sm={12}>
                     <AppTitle />
                 </Grid>
-                <Grid item lg={6} md={6} sm={12}>
+                <Grid item lg={5} md={5} sm={12}>
                     <ExpenseTable
                         transactions={transactions}
                         onEdit={handleEditTransaction}
@@ -119,7 +118,7 @@ function HomePage() {
                 <Grid item lg={3} md={3} sm={12}>
                     <BalanceSheet />
                 </Grid>
-                <Grid item lg={3} md={3} sm={12}>
+                <Grid item lg={4} md={4} sm={12}>
                     <Paper style={{ padding: 16 }}>
                         <UsersTable
                             users={users}

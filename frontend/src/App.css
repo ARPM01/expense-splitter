@@ -41,8 +41,14 @@
   }
 }
 
-/* HomePage */
+/* ExpenseTable */
 #add-transaction-button {
   margin-top: 1em;
   margin-bottom: 2em;
+}
+
+/* UsersTable */
+#add-user-button {
+  margin-top: 1em;
+  margin-bottom: 1em;
 }

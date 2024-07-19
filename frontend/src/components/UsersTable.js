@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Paper, Typography } from '@mui/material';
+import { Button, Paper, Typography, Table, TableHead, TableBody, TableCell, TableRow } from '@mui/material';
+
 import { Person } from '@mui/icons-material';
 
 const UsersTable = ({ users, handleEditUser, handleDeleteUser, handleAddUser }) => {
@@ -8,16 +9,26 @@ const UsersTable = ({ users, handleEditUser, handleDeleteUser, handleAddUser }) 
             <Typography variant="h6" gutterBottom>
                 <Person />&nbsp;&nbsp;&nbsp;Users
             </Typography>
-            <ul>
-                {users.map(user => (
-                    <li key={user._id}>
-                        {user.name} - {user.email}
-                        <Button onClick={() => handleEditUser(user)}>Edit</Button>
-                        <Button onClick={() => handleDeleteUser(user._id)}>Delete</Button>
-                    </li>
-                ))}
-            </ul>
-            <Button variant="contained" color="secondary" onClick={handleAddUser}>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {users.map(user => (
+                        <TableRow key={user._id}>
+                            <TableCell>{user.name}</TableCell>
+                            <TableCell>
+                                <Button onClick={() => handleEditUser(user)}>Edit</Button>
+                                <Button onClick={() => handleDeleteUser(user._id)}>Delete</Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+            <Button variant="contained" color="secondary" onClick={handleAddUser} id="add-user-button">
                 Add User
             </Button>
         </Paper>
